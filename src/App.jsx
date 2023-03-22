@@ -157,17 +157,7 @@ function App() {
             </Select>
           </FormControl>
         </Box>
-      
 
-      {/* select */}
-      <Stack spacing={2} direction="row">
-
-      </Stack>
-
-
-
-      <Stack spacing={2} direction="row">
-      </Stack>
     </div>
   );
 }
