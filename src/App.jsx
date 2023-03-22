@@ -24,18 +24,16 @@ const marks = [
     label: '100°C',
   },
 ];
+
 function App() {
   const [value, setValue] = React.useState(30);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  function valuetext(value) {
-    return `${value}°C`;
-  }
-
   return (
     <>
+      {/* horizantal */}
       <Box sx={{ width: 200 }}>
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
           <VolumeDown />
@@ -57,7 +55,8 @@ function App() {
           max={110}
         />
       </Box>
-
+      
+      {/* vertical */}
       <Stack sx={{ height: 300 }} spacing={1} direction="row">
         <Slider
           aria-label="Temperature"
