@@ -1,108 +1,207 @@
 import * as React from 'react';
-import { Typography, Stack, Switch, FormControlLabel, FormGroup, styled } from '@mui/material';
+import { PauseRounded, PlayArrowRounded, FastForwardRounded, FastRewindRounded, VolumeUpRounded, VolumeDownRounded } from '@mui/icons-material';
+import { Slider, styled, useTheme, Box, Typography, IconButton, Stack } from '@mui/material';
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-  width: 62,
-  height: 34,
-  padding: 7,
-  '& .MuiSwitch-switchBase': {
-    margin: 1,
-    padding: 0,
-    transform: 'translateX(6px)',
-    '&.Mui-checked': {
-      color: '#fff',
-      transform: 'translateX(22px)',
-      '& .MuiSwitch-thumb:before': {
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          '#fff',
-        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
-      },
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-      },
-    },
+const WallPaper = styled('div')({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  overflow: 'hidden',
+  background: 'linear-gradient(rgb(255, 38, 142) 0%, rgb(255, 105, 79) 100%)',
+  transition: 'all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s',
+  '&:before': {
+    content: '""',
+    width: '140%',
+    height: '140%',
+    position: 'absolute',
+    top: '-40%',
+    right: '-50%',
+    background:
+      'radial-gradient(at center center, rgb(62, 79, 249) 0%, rgba(62, 79, 249, 0) 64%)',
   },
-  '& .MuiSwitch-thumb': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
-    width: 32,
-    height: 32,
-    '&:before': {
-      content: "''",
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      left: 0,
-      top: 0,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        '#fff',
-      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
-    },
+  '&:after': {
+    content: '""',
+    width: '140%',
+    height: '140%',
+    position: 'absolute',
+    bottom: '-50%',
+    left: '-30%',
+    background:
+      'radial-gradient(at center center, rgb(247, 237, 225) 0%, rgba(247, 237, 225, 0) 70%)',
+    transform: 'rotate(30deg)',
   },
-  '& .MuiSwitch-track': {
-    opacity: 1,
-    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-    borderRadius: 20 / 2,
-  },
+});
+
+const Widget = styled('div')(({ theme }) => ({
+  padding: 16,
+  borderRadius: 16,
+  width: 343,
+  maxWidth: '100%',
+  margin: 'auto',
+  position: 'relative',
+  zIndex: 1,
+  backgroundColor:
+    theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.4)',
+  backdropFilter: 'blur(40px)',
 }));
 
+const CoverImage = styled('div')({
+  width: 100,
+  height: 100,
+  objectFit: 'cover',
+  overflow: 'hidden',
+  flexShrink: 0,
+  borderRadius: 8,
+  backgroundColor: 'rgba(0,0,0,0.08)',
+  '& > img': {
+    width: '100%',
+  },
+});
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 28,
-  height: 16,
-  padding: 0,
-  display: 'flex',
-  '&:active': {
-    '& .MuiSwitch-thumb': {
-      width: 15,
-    },
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      transform: 'translateX(9px)',
-    },
-  },
-  '& .MuiSwitch-switchBase': {
-    padding: 2,
-    '&.Mui-checked': {
-      transform: 'translateX(12px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
-      },
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    transition: theme.transitions.create(['width'], {
-      duration: 200,
-    }),
-  },
-  '& .MuiSwitch-track': {
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor:
-      theme.palette.mode === 'dark' ? 'rgba(255,255,255,.35)' : 'rgba(0,0,0,.25)',
-    boxSizing: 'border-box',
-  },
-}));
+const TinyText = styled(Typography)({
+  fontSize: '0.75rem',
+  opacity: 0.38,
+  fontWeight: 500,
+  letterSpacing: 0.2,
+});
 
-export default function CustomizedSwitches() {
+export default function MusicPlayerSlider() {
+  const theme = useTheme();
+  const duration = 200; // seconds
+  const [position, setPosition] = React.useState(32);
+  const [paused, setPaused] = React.useState(false);
+  function formatDuration(value) {
+    const minute = Math.floor(value / 60);
+    const secondLeft = value - minute * 60;
+    return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+  }
+  const mainIconColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
+  const lightIconColor =
+    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
   return (
-    <FormGroup>
-      <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-        label="MUI switch"
-      />
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Typography>Off</Typography>
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-        <Typography>On</Typography>
-      </Stack>
-    </FormGroup>
+    <Box sx={{ maxWidth: '100%', overflow: 'hidden', mt: 25 }}>
+      <Widget>
+        <Box sx={{ display: 'flex', alignItems: 'center'}}>
+          <CoverImage>
+            <img
+              alt="can't win - Chilling Sunday"
+              src="https://t.ly/SqK7"
+            />
+          </CoverImage>
+          <Box sx={{ ml: 1.5, minWidth: 0 }}>
+            <Typography variant="caption" color="text.secondary" fontWeight={500}>
+              Tez Programmer
+            </Typography>
+            <Typography noWrap>
+              <b>Hello Universe (Can&apos;t win)</b>
+            </Typography>
+            <Typography noWrap letterSpacing={-0.25}>
+              Chilling Sunday &mdash; Shayan Biswas
+            </Typography>
+          </Box>
+        </Box>
+        <Slider
+          aria-label="time-indicator"
+          size="small"
+          value={position}
+          min={0}
+          step={1}
+          max={duration}
+          onChange={(_, value) => setPosition(value)}
+          sx={{
+            color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
+            height: 4,
+            '& .MuiSlider-thumb': {
+              width: 8,
+              height: 8,
+              transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+              '&:before': {
+                boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
+              },
+              '&:hover, &.Mui-focusVisible': {
+                boxShadow: `0px 0px 0px 8px ${theme.palette.mode === 'dark'
+                  ? 'rgb(255 255 255 / 16%)'
+                  : 'rgb(0 0 0 / 16%)'
+                  }`,
+              },
+              '&.Mui-active': {
+                width: 20,
+                height: 20,
+              },
+            },
+            '& .MuiSlider-rail': {
+              opacity: 0.28,
+            },
+          }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mt: -2,
+          }}
+        >
+          <TinyText>{formatDuration(position)}</TinyText>
+          <TinyText>-{formatDuration(duration - position)}</TinyText>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mt: -1,
+          }}
+        >
+          <IconButton aria-label="previous song">
+            <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
+          </IconButton>
+          <IconButton
+            aria-label={paused ? 'play' : 'pause'}
+            onClick={() => setPaused(!paused)}
+          >
+            {paused ? (
+              <PlayArrowRounded
+                sx={{ fontSize: '3rem' }}
+                htmlColor={mainIconColor}
+              />
+            ) : (
+              <PauseRounded sx={{ fontSize: '3rem' }} htmlColor={mainIconColor} />
+            )}
+          </IconButton>
+          <IconButton aria-label="next song">
+            <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
+          </IconButton>
+        </Box>
+        <Stack spacing={2} direction="row" sx={{ mb: 1, px: 1 }} alignItems="center">
+          <VolumeDownRounded htmlColor={lightIconColor} />
+          <Slider
+            aria-label="Volume"
+            defaultValue={30}
+            sx={{
+              color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
+              '& .MuiSlider-track': {
+                border: 'none',
+              },
+              '& .MuiSlider-thumb': {
+                width: 24,
+                height: 24,
+                backgroundColor: '#fff',
+                '&:before': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.4)',
+                },
+                '&:hover, &.Mui-focusVisible, &.Mui-active': {
+                  boxShadow: 'none',
+                },
+              },
+            }}
+          />
+          <VolumeUpRounded htmlColor={lightIconColor} />
+        </Stack>
+      </Widget>
+      <WallPaper />
+    </Box>
   );
 }
