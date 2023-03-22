@@ -1,108 +1,128 @@
 import * as React from 'react';
-import { Typography, Stack, Switch, FormControlLabel, FormGroup, styled } from '@mui/material';
+import { FormatAlignLeft, FormatAlignCenter, FormatAlignRight, FormatAlignJustify, FormatBold, FormatItalic, FormatUnderlined, FormatColorFill, ArrowDropDown, Assignment, Pageview, Folder } from '@mui/icons-material';
+import { styled, Divider, Paper, ToggleButtonGroup, ToggleButton, Avatar, Stack, AvatarGroup } from '@mui/material';
+import { deepOrange, deepPurple, green, pink } from '@mui/material/colors';
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-  width: 62,
-  height: 34,
-  padding: 7,
-  '& .MuiSwitch-switchBase': {
-    margin: 1,
-    padding: 0,
-    transform: 'translateX(6px)',
-    '&.Mui-checked': {
-      color: '#fff',
-      transform: 'translateX(22px)',
-      '& .MuiSwitch-thumb:before': {
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          '#fff',
-        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
-      },
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-      },
+
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  '& .MuiToggleButtonGroup-grouped': {
+    margin: theme.spacing(0.5),
+    border: 0,
+    '&.Mui-disabled': {
+      border: 0,
     },
-  },
-  '& .MuiSwitch-thumb': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
-    width: 32,
-    height: 32,
-    '&:before': {
-      content: "''",
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      left: 0,
-      top: 0,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        '#fff',
-      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+    '&:not(:first-of-type)': {
+      borderRadius: theme.shape.borderRadius,
     },
-  },
-  '& .MuiSwitch-track': {
-    opacity: 1,
-    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-    borderRadius: 20 / 2,
+    '&:first-of-type': {
+      borderRadius: theme.shape.borderRadius,
+    },
   },
 }));
 
+export default function CustomizedDividers() {
+  const [alignment, setAlignment] = React.useState('left');
+  const [formats, setFormats] = React.useState(() => ['italic']);
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 28,
-  height: 16,
-  padding: 0,
-  display: 'flex',
-  '&:active': {
-    '& .MuiSwitch-thumb': {
-      width: 15,
-    },
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      transform: 'translateX(9px)',
-    },
-  },
-  '& .MuiSwitch-switchBase': {
-    padding: 2,
-    '&.Mui-checked': {
-      transform: 'translateX(12px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
-      },
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    transition: theme.transitions.create(['width'], {
-      duration: 200,
-    }),
-  },
-  '& .MuiSwitch-track': {
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor:
-      theme.palette.mode === 'dark' ? 'rgba(255,255,255,.35)' : 'rgba(0,0,0,.25)',
-    boxSizing: 'border-box',
-  },
-}));
+  const handleFormat = (event, newFormats) => {
+    setFormats(newFormats);
+  };
 
-export default function CustomizedSwitches() {
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
   return (
-    <FormGroup>
-      <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-        label="MUI switch"
-      />
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Typography>Off</Typography>
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-        <Typography>On</Typography>
+    <>
+      {/* Toggle Button */}
+      <Paper
+        elevation={0}
+        sx={{
+          display: 'flex',
+          border: (theme) => `1px solid ${theme.palette.divider}`,
+          flexWrap: 'wrap',
+        }}
+      >
+        <StyledToggleButtonGroup
+          size="small"
+          value={alignment}
+          exclusive
+          onChange={handleAlignment}
+          aria-label="text alignment"
+        >
+          <ToggleButton value="left" aria-label="left aligned">
+            <FormatAlignLeft />
+          </ToggleButton>
+          <ToggleButton value="center" aria-label="centered">
+            <FormatAlignCenter />
+          </ToggleButton>
+          <ToggleButton value="right" aria-label="right aligned">
+            <FormatAlignRight />
+          </ToggleButton>
+          <ToggleButton value="justify" aria-label="justified" disabled>
+            <FormatAlignJustify />
+          </ToggleButton>
+        </StyledToggleButtonGroup>
+        <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+        <StyledToggleButtonGroup
+          size="small"
+          value={formats}
+          onChange={handleFormat}
+          aria-label="text formatting"
+        >
+          <ToggleButton value="bold" aria-label="bold">
+            <FormatBold />
+          </ToggleButton>
+          <ToggleButton value="italic" aria-label="italic">
+            <FormatItalic />
+          </ToggleButton>
+          <ToggleButton value="underlined" aria-label="underlined">
+            <FormatUnderlined />
+          </ToggleButton>
+          <ToggleButton value="color" aria-label="color" disabled>
+            <FormatColorFill />
+            <ArrowDropDown />
+          </ToggleButton>
+        </StyledToggleButtonGroup>
+      </Paper>
+
+      {/* Avatar */}
+      {/* Letter avatars */}
+      <Stack direction="row" spacing={2}>
+        <Avatar>H</Avatar>
+        <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+        <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
       </Stack>
-    </FormGroup>
+
+      {/* Icon avatars */}
+      <Stack direction="row" spacing={2}>
+        <Avatar>
+          <Folder />
+        </Avatar>
+        <Avatar sx={{ bgcolor: pink[500] }}>
+          <Pageview />
+        </Avatar>
+        <Avatar sx={{ bgcolor: green[500] }}>
+          <Assignment />
+        </Avatar>
+      </Stack>
+
+      {/* Image avatars */}
+      <Stack direction="row" spacing={2}>
+        <Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" />
+        <Avatar alt="Travis Howard" src="https://mui.com/static/images/avatar/2.jpg" />
+        <Avatar alt="Cindy Baker" src="https://mui.com/static/images/avatar/3.jpg" />
+      </Stack>
+
+      {/* Total avatars */}
+      <AvatarGroup total={24}>
+        <Avatar alt="Remy Sharp" src="https://mui.com//static/images/avatar/1.jpg" />
+        <Avatar alt="Travis Howard" src="https://mui.com//static/images/avatar/2.jpg" />
+        <Avatar alt="Agnes Walker" src="https://mui.com//static/images/avatar/4.jpg" />
+        <Avatar alt="Trevor Henderson" src="https://mui.com//static/images/avatar/5.jpg" />
+      </AvatarGroup>
+    </>
   );
 }
+
+
